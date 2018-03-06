@@ -3,9 +3,10 @@ package JCF.calc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class EenFrequentie {
+public class EenFrequentie implements Callable {
     private String input;
     private List<Character> characters;
 
@@ -13,8 +14,8 @@ public class EenFrequentie {
         this.input = input;
     }
 
-    public String start()
-    {
+    @Override
+    public String call() throws Exception {
         input = input.replaceAll("\\s","");
         this.characters = this.input.chars().mapToObj(e->(char)e).collect(Collectors.toList());
         HashMap<Character, Integer> charCount = new HashMap<Character, Integer>();

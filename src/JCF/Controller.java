@@ -4,6 +4,11 @@ import JCF.calc.EenFrequentie;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class Controller {
     @FXML
     private TextArea ta_input;
@@ -11,17 +16,22 @@ public class Controller {
     private TextArea ta_output;
 
     @FXML
-    private void eenFrequentie(){
+    private void eenFrequentie() {
 
-        Thread t1 = new Thread(() -> {
-            long start = System.currentTimeMillis();
-            EenFrequentie task = new EenFrequentie(ta_input.getText());
-            String output = task.start();
-            long stop = System.currentTimeMillis();
-            long time = stop - start;
-            ta_output.setText("tijd berekening "  + time + " ms\n" + output);
-        });
-        t1.start();
+        long start = System.currentTimeMillis();
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        EenFrequentie task = new EenFrequentie(ta_input.getText());
+        Future<String> futureEenFrequentie = pool.submit(task);
+        String output = null;
+        try {
+            output = futureEenFrequentie.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        long stop = System.currentTimeMillis();
+        long time = stop - start;
+        ta_output.setText("tijd berekening " + time + " ms\n" + output);
+
+
     }
-
 }
