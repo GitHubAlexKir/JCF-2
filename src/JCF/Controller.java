@@ -1,6 +1,7 @@
 package JCF;
 
 import JCF.calc.EenFrequentie;
+import JCF.calc.Huffman;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
@@ -25,6 +26,25 @@ public class Controller {
         String output = null;
         try {
             output = futureEenFrequentie.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        long stop = System.currentTimeMillis();
+        long time = stop - start;
+        ta_output.setText("tijd berekening " + time + " ms\n" + output);
+
+
+    }
+    @FXML
+    private void huffman() {
+
+        long start = System.currentTimeMillis();
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        Huffman task = new Huffman(ta_input.getText());
+        Future<String> futureHuffman = pool.submit(task);
+        String output = null;
+        try {
+            output = futureHuffman.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
