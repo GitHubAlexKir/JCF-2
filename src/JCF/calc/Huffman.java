@@ -65,9 +65,10 @@ public class Huffman implements Callable{
 
     public void printCodes(HuffmanTree tree, StringBuffer prefix) {
         assert tree != null;
+        HashMap<Character, Integer> charHuff = new HashMap<Character, Integer>();
         if (tree instanceof HuffmanLeaf) {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
-
+            charHuff.put(leaf.value,Integer.valueOf(prefix.toString()));
             // print out character, frequency, and code for this leaf (which is just the prefix)
             stringBuilder.append("\n" + leaf.value + "\t" + leaf.frequency + "\t" + prefix);
 
@@ -84,14 +85,17 @@ public class Huffman implements Callable{
             printCodes(node.right, prefix);
             prefix.deleteCharAt(prefix.length()-1);
         }
+
     }
 
     @Override
     public String call() throws Exception {
         int[] charFreqs = new int[256];
         // read each character and record the frequencies
-        for (char c : text.toCharArray())
+        for (char c : text.toCharArray()) {
+            System.out.println("Char value: " + Integer.valueOf(c));
             charFreqs[c]++;
+        }
 
         // build tree
         HuffmanTree tree = buildTree(charFreqs);
@@ -99,6 +103,7 @@ public class Huffman implements Callable{
         // print out results
         stringBuilder.append("\nSYMBOL\tWEIGHT\tHUFFMAN CODE");
         printCodes(tree, new StringBuffer());
+
         return stringBuilder.toString();
     }
 }

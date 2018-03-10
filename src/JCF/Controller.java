@@ -36,7 +36,7 @@ public class Controller {
 
     }
     @FXML
-    private void huffman() {
+    private void tweeHuffman() {
 
         long start = System.currentTimeMillis();
         ExecutorService pool = Executors.newFixedThreadPool(1);

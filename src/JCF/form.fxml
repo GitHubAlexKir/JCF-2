@@ -22,7 +22,7 @@
             <TextArea fx:id="ta_input" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="487.0" />
             <TextArea fx:id="ta_output" layoutX="14.0" layoutY="234.0" prefHeight="200.0" prefWidth="487.0" />
             <Button layoutX="14.0" layoutY="442.0" mnemonicParsing="false" onAction="#eenFrequentie" text="Stap 1: Frequentie " />
-            <Button layoutX="173.0" layoutY="442.0" mnemonicParsing="false" onAction="#huffman" text="Huffman" />
+            <Button layoutX="173.0" layoutY="442.0" mnemonicParsing="false" onAction="#tweeHuffman" text="Huffman" />
          </children>
       </Pane>
    </children>
