@@ -36,9 +36,11 @@ class HuffmanNode extends HuffmanTree {
 public class Huffman implements Callable{
     private String text;
     private StringBuilder stringBuilder;
+    private HashMap<Character, Integer> charHuff;
     public Huffman(String text) {
         this.text = text;
         this.stringBuilder = new StringBuilder();
+        this.charHuff = new HashMap<Character, Integer>();
     }
 
     // input is an array of frequencies, indexed by character code
@@ -65,7 +67,6 @@ public class Huffman implements Callable{
 
     public void printCodes(HuffmanTree tree, StringBuffer prefix) {
         assert tree != null;
-        HashMap<Character, Integer> charHuff = new HashMap<Character, Integer>();
         if (tree instanceof HuffmanLeaf) {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
             charHuff.put(leaf.value,Integer.valueOf(prefix.toString()));
@@ -103,7 +104,11 @@ public class Huffman implements Callable{
         // print out results
         stringBuilder.append("\nSYMBOL\tWEIGHT\tHUFFMAN CODE");
         printCodes(tree, new StringBuffer());
-
+        stringBuilder.append("\ndecoded string\n");
+        for (char i: this.text.toCharArray()
+                ) {
+            stringBuilder.append(charHuff.get(i));
+        }
         return stringBuilder.toString();
     }
 }
