@@ -36,11 +36,11 @@ class HuffmanNode extends HuffmanTree {
 public class Huffman implements Callable{
     private String text;
     private StringBuilder stringBuilder;
-    private HashMap<Character, Integer> charHuff;
+    private HashMap<Character, String> charHuff;
     public Huffman(String text) {
         this.text = text;
         this.stringBuilder = new StringBuilder();
-        this.charHuff = new HashMap<Character, Integer>();
+        this.charHuff = new HashMap<Character, String>();
     }
 
     // input is an array of frequencies, indexed by character code
@@ -69,7 +69,7 @@ public class Huffman implements Callable{
         assert tree != null;
         if (tree instanceof HuffmanLeaf) {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
-            charHuff.put(leaf.value,Integer.valueOf(prefix.toString()));
+            charHuff.put(leaf.value,prefix.toString());
             // print out character, frequency, and code for this leaf (which is just the prefix)
             stringBuilder.append("\n" + leaf.value + "\t" + leaf.frequency + "\t" + prefix);
 
@@ -88,13 +88,39 @@ public class Huffman implements Callable{
         }
 
     }
+    private String encode(HashMap<Character, String> charHuffMap, String textIn)
+    {
+        String encode = "";
+        for (char i: textIn.toCharArray()
+                ) {
+            encode += charHuff.get(i);
+        }
+        return encode;
+    }
+    private String decode(HashMap<Character, String> charHuffMap, String encoded)
+    {
+        String decode = "";
+        while (encoded.length() > 0)
+        {
+            for(Map.Entry<Character, String> entry : charHuffMap.entrySet()) {
+                Character key = entry.getKey();
+                String value = entry.getValue();
+                int place = encoded.indexOf(value);
+                if (place == 0)
+                {
+                    decode += key;
+                    encoded = encoded.substring(value.toString().length());
+                }
+            }
+        }
+        return decode;
+    }
 
     @Override
     public String call() throws Exception {
         int[] charFreqs = new int[256];
         // read each character and record the frequencies
         for (char c : text.toCharArray()) {
-            System.out.println("Char value: " + Integer.valueOf(c));
             charFreqs[c]++;
         }
 
@@ -104,10 +130,16 @@ public class Huffman implements Callable{
         // print out results
         stringBuilder.append("\nSYMBOL\tWEIGHT\tHUFFMAN CODE");
         printCodes(tree, new StringBuffer());
-        stringBuilder.append("\ndecoded string\n");
-        for (char i: this.text.toCharArray()
-                ) {
-            stringBuilder.append(charHuff.get(i));
+        String encode = encode(this.charHuff,this.text);
+        stringBuilder.append("\nEncoded string\n" + encode);
+        stringBuilder.append("\n\nDecoding string with the Tree");
+        String decode = decode(this.charHuff,encode);
+        stringBuilder.append("\nDecoded string\n" + decode);
+        if (decode.equals(this.text)){
+            stringBuilder.append("\ndecode PASSED");
+        }
+        else {
+            stringBuilder.append("\ndecode FAILED");
         }
         return stringBuilder.toString();
     }
