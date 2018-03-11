@@ -93,7 +93,7 @@ public class Huffman implements Callable{
         String encode = "";
         for (char i: textIn.toCharArray()
                 ) {
-            encode += charHuff.get(i);
+            encode += charHuffMap.get(i);
         }
         return encode;
     }
