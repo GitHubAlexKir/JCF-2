@@ -1,5 +1,6 @@
 package JCF.calc;
 
+import java.io.FileInputStream;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -37,8 +38,10 @@ public class Huffman implements Callable{
     private String text;
     private StringBuilder stringBuilder;
     private HashMap<Character, String> charHuff;
-    public Huffman(String text) {
+    private String fileName;
+    public Huffman(String text,String fileName) {
         this.text = text;
+        this.fileName = fileName;
         this.stringBuilder = new StringBuilder();
         this.charHuff = new HashMap<Character, String>();
     }
@@ -132,15 +135,21 @@ public class Huffman implements Callable{
         printCodes(tree, new StringBuffer());
         String encode = encode(this.charHuff,this.text);
         stringBuilder.append("\nEncoded string\n" + encode);
-        stringBuilder.append("\n\nDecoding string with the Tree");
-        String decode = decode(this.charHuff,encode);
-        stringBuilder.append("\nDecoded string\n" + decode);
-        if (decode.equals(this.text)){
-            stringBuilder.append("\ndecode PASSED");
-        }
-        else {
-            stringBuilder.append("\ndecode FAILED");
-        }
+        HuffmanEncodeSave huffmanEncodeSave = new HuffmanEncodeSave(this.charHuff,encode,this.fileName);
+        huffmanEncodeSave.save();
+        /** testing code for decode and encode**/
+        //stringBuilder.append("\n\nDecoding string with the Tree");
+        //String decode = decode(this.charHuff,encode);
+        //stringBuilder.append("\nDecoded string\n" + decode);
+        //if (decode.equals(this.text)){
+        //    stringBuilder.append("\ndecode PASSED");
+        //    HuffmanEncodeSave huffmanEncodeSave = new HuffmanEncodeSave(this.charHuff,encode,this.fileName);
+        //    huffmanEncodeSave.save();
+        //    HuffmanDecode huffmanDecode = new HuffmanDecode(new FileInputStream(this.fileName + ".ser"),encode);
+        //}
+        //else {
+        //    stringBuilder.append("\ndecode FAILED");
+        //}
         return stringBuilder.toString();
     }
 }
